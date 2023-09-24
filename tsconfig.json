@@ -10,3 +10,24 @@
     ],
     "exclude": ["node_modules"]
 }
+
+// {
+//     "compilerOptions": {
+//         "module": "commonjs",
+//         "moduleResolution": "node",
+//         "pretty": true,
+//         "sourceMap": true,
+//         "esModuleInterop": true,
+//         "emitDecoratorMetadata": true,
+//         "experimentalDecorators": true,
+//         "target": "es6",
+//         "outDir": "./dist",
+//         "baseUrl": "./lib",
+//         "typeRoots": [
+//             "./types",
+//             "./node_modules/@types"
+//         ]
+//     },
+//     "include": ["**/*.ts"],
+//     "exclude": ["node_modules"]
+// }

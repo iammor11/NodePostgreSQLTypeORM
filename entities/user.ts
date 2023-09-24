@@ -1,7 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, BaseEntity } from "typeorm";
+import { Role } from "./role"
+
+export enum StatusEnum {
+    AVAILABLE = "available",
+    BUSY = "busy",
+    DONTDISTURB = "dontDisturb",
+    OFFWORK = "offWork",
+    APPEARAWAY = "appearAway",
+    BREAK = "break",
+}
 
 @Entity("users")
-class User extends BaseEntity {
+class User extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
@@ -14,16 +24,36 @@ class User extends BaseEntity {
     @Column({ type: "text" })
     lastName: string;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", select: false })
     password: string;
 
-    @DeleteDateColumn({ name: "deletedAt", nullable: true })
+    @Column({
+        type: "enum",
+        enum: StatusEnum,
+        default: StatusEnum.OFFWORK,
+    })
+    status: string;
+
+    @OneToOne(() => Role)
+    @JoinColumn()
+    roleId: Role
+
+    @Column({ type: "boolean", default: false })
+    isVerified: Boolean;
+
+    @Column({ type: "boolean", default: false, select: false })
+    isBlocked: Boolean;
+
+    @Column({ type: "boolean", default: false, select: false })
+    isDeleted: Boolean;
+
+    @DeleteDateColumn({ name: "deletedAt", nullable: true, select: false })
     deletedAt: Date;
 
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updatedAt" })
+    @UpdateDateColumn({ name: "updatedAt", select: false })
     updatedAt: Date;
 }
 

@@ -1,19 +1,17 @@
 import { Router } from 'express'
-import { addUser, getAllUser, getAllDeletedUser, getUserById, updateUserById, updateWholeUserById, deleteUserById } from '../controllers/user'
+import { addUser, getAllUser, getAllDeletedUser, getUserById, updateUser, deleteUserById } from '../controllers/user'
 
 const router = Router()
 
 router.get('/', getAllUser)
 
-router.get('/deleted', getAllDeletedUser)
+router.get('/archived', getAllDeletedUser)
 
 router.get('/:id', getUserById)
 
 router.post('/', addUser)
 
-router.put('/', updateUserById)
-
-router.patch('/', updateWholeUserById)
+router.patch('/', updateUser)
 
 router.delete('/:id', deleteUserById)
 

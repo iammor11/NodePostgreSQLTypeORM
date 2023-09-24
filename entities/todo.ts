@@ -1,23 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, BaseEntity } from "typeorm";
+import User from "./user"
 
-@Entity()
-class Todo extends BaseEntity {
+@Entity("todos")
+class Todo extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")
-    id: string;
+    id: string
 
     @Column({ type: "text" })
-    text: string;
+    text: string
 
     @Column({ type: "text" })
-    description: string;
+    description: string
+
+    @OneToOne(() => User)
+    @JoinColumn()
+    userId: User
+
+    @Column({ type: "boolean", default: false })
+    isDeleted: Boolean;
 
     @DeleteDateColumn({ name: "deletedAt", nullable: true })
     deletedAt: Date;
 
-    @CreateDateColumn({ name: "createdAt" })
+    @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updatedAt" })
+    @UpdateDateColumn()
     updatedAt: Date;
 }
 

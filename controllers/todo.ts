@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, RequestHandler } from 'express'
 import Todo from '../entities/todo'
 
-export const addTodo = async (req: Request, res: Response, next: NextFunction) => {
+export const addTodo: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { title, description } = req.body
         const data = { title, description }
@@ -20,7 +20,7 @@ export const addTodo = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
-export const getAllTodo = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllTodo: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await Todo.find()
         if (result?.length === 0) {
@@ -41,7 +41,7 @@ export const getAllTodo = async (req: Request, res: Response, next: NextFunction
     }
 }
 
-export const getAllDeletedTodo = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllDeletedTodo: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await Todo.find({ withDeleted: true })
         if (result?.length === 0) {
@@ -62,12 +62,12 @@ export const getAllDeletedTodo = async (req: Request, res: Response, next: NextF
     }
 }
 
-export const getTodoById = async (req: Request, res: Response, next: NextFunction) => {
+export const getTodoById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params
         const result = await Todo.findOneBy({ id })
         if (!result) {
-            return res.status(200).json({
+            return res.status(404).json({
                 message: "There is no todo with that id"
             })
         }
@@ -84,12 +84,12 @@ export const getTodoById = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
-export const updateTodoById = async (req: Request, res: Response, next: NextFunction) => {
+export const updateTodo: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id, data } = req.body
         const todo = await Todo.findOneBy({ id })
         if (!todo) {
-            return res.status(200).json({
+            return res.status(404).json({
                 message: "There is no todo with that id"
             })
         }
@@ -112,35 +112,7 @@ export const updateTodoById = async (req: Request, res: Response, next: NextFunc
     }
 }
 
-export const updateWholeTodoById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { id, data } = req.body
-        const todo = await Todo.findOneBy({ id })
-        if (!todo) {
-            return res.status(200).json({
-                message: "There is no todo with that id"
-            })
-        }
-        const keys = Object.keys(data)
-        const values = Object.values(data)
-        for (let i = 0; i < keys.length; i++) {
-            todo[keys[i]] = values[i];
-        }
-        const result = await todo.save()
-        return res.status(201).json({
-            message: "Todo updated successfully",
-            result
-        })
-    }
-    catch (error) {
-        return res.status(500).json({
-            message: "Something went wrong",
-            error
-        })
-    }
-}
-
-export const deleteTodoById = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteTodoById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params
         const todo = await Todo.findOneBy({ id })
